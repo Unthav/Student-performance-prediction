@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Prediction History</title>
+<style>
+  :root {
+    --bg: #0b0f1a;
+    --card: #111827;
+    --border: #232c3d;
+    --text: #e5e9f0;
+    --muted: #8b95a7;
+    --accent: #3b82f6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    margin: 0;
+    padding: 40px 20px;
+  }
+  .card {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+  }
+  h2 { margin-top: 0; }
+  a { color: var(--muted); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 13px;
+  }
+  th, td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    white-space: nowrap;
+  }
+  th { color: var(--muted); font-weight: 600; }
+  td.score { color: #6ee7a0; font-weight: 600; }
+  .wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h2>Prediction History</h2>
+  <a href="/">← Back to form</a>
+
+  <div class="wrap">
+  <table>
+    <tr>
+      <th>#</th>
+      {% for f in fields %}<th>{{ f.replace('_', ' ') }}</th>{% endfor %}
+      <th>Predicted Score</th>
+      <th>Date</th>
+    </tr>
+    {% for row in rows %}
+    <tr>
+      <td>{{ row['id'] }}</td>
+      {% for f in fields %}<td>{{ row[f] }}</td>{% endfor %}
+      <td class="score">{{ row['predicted_score'] }}</td>
+      <td>{{ row['created_at'] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  </div>
+</div>
+</body>
+</html>

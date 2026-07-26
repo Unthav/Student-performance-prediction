@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Exam Score Predictor</title>
+<style>
+  :root {
+    --bg: #0b0f1a;
+    --card: #111827;
+    --border: #232c3d;
+    --text: #e5e9f0;
+    --muted: #8b95a7;
+    --accent: #3b82f6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    margin: 0;
+    padding: 40px 20px;
+  }
+  .card {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+  }
+  h2.section {
+    font-size: 17px;
+    margin: 28px 0 18px;
+  }
+  h2.section:first-child { margin-top: 0; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px 32px;
+  }
+  .field label {
+    display: block;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .slider-value {
+    color: var(--accent);
+    text-align: center;
+    display: block;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+  }
+  select {
+    width: 100%;
+    background: #0f1522;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238b95a7' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+  .radio-group {
+    display: flex;
+    gap: 20px;
+  }
+  .radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 0;
+  }
+  .radio-group input[type="radio"] {
+    accent-color: var(--accent);
+    width: 16px;
+    height: 16px;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 28px 0;
+  }
+  button {
+    width: 100%;
+    margin-top: 32px;
+    padding: 14px;
+    background: #0f1522;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  button:hover { background: #161d2e; }
+  .result {
+    margin-top: 20px;
+    padding: 16px;
+    text-align: center;
+    background: #10281c;
+    border: 1px solid #1f5138;
+    color: #6ee7a0;
+    border-radius: 10px;
+    font-size: 16px;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <form method="POST">
+ 
+    <h2 class="section">Academic &amp; study habits</h2>
+    <div class="grid">
+      {% for field, (label, min_v, max_v, default) in sliders.items() %}
+      <div class="field">
+        <label>{{ label }}</label>
+        <span class="slider-value" id="{{ field }}_val">{{ default }}</span>
+        <input type="range" name="{{ field }}" min="{{ min_v }}" max="{{ max_v }}"
+               value="{{ default }}" oninput="document.getElementById('{{ field }}_val').textContent = this.value">
+      </div>
+      {% endfor %}
+    </div>
+ 
+    <hr>
+    <h2 class="section">Support &amp; environment</h2>
+    <div class="grid">
+      {% for field, choices in dropdowns.items() %}
+      <div class="field">
+        <label>{{ field.replace('_', ' ') }}</label>
+        <select name="{{ field }}">
+          {% for choice in choices %}
+          <option value="{{ choice }}">{{ choice }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endfor %}
+    </div>
+ 
+    <hr>
+    <h2 class="section">Other factors</h2>
+    <div class="grid">
+      {% for field, choices in radios.items() %}
+      <div class="field">
+        <label>{{ field.replace('_', ' ') }}</label>
+        <div class="radio-group">
+          {% for choice in choices %}
+          <label>
+            <input type="radio" name="{{ field }}" value="{{ choice }}" {% if loop.first %}checked{% endif %}>
+            {{ choice }}
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+ 
+    <button type="submit">🎓 Predict Exam Score</button>
+  </form>
+ 
+  {% if prediction is not none %}
+  <div class="result">Predicted Exam Score: {{ prediction }}</div>
+  {% endif %}
+ 
+  <p style="text-align:center; margin-top:20px;">
+    <a href="/history" style="color:#8b95a7;">View prediction history →</a>
+  </p>
+</div>
+</body>
+</html>
