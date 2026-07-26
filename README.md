@@ -36,7 +36,7 @@ Features
 ✔ SQLite Database,
 ✔ Responsive UI
 
-Machine Learning
+Machine Learning using: 
 Linear Regression,
 Random Forest Regression,
 Decision Tree Regression,
